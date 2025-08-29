@@ -16,11 +16,11 @@ import com.example.dscommerce.repositories.ProductRepository;
 public class ProductService {
 
     @Autowired
-    private ProductRepository productRespository;
+    private ProductRepository productRepository;
 
     @Transactional(readOnly=true)
     public ProductDTO findById(Long id) {
-        Optional<Product> result = productRespository.findById(id);
+        Optional<Product> result = productRepository.findById(id);
         Product product = result.get();
         ProductDTO dto = new ProductDTO(product);
         return dto;
@@ -28,7 +28,19 @@ public class ProductService {
 
     @Transactional(readOnly=true)
     public Page<ProductDTO> findAll(Pageable pageable) {
-        Page<Product> products = productRespository.findAll(pageable);
+        Page<Product> products = productRepository.findAll(pageable);
         return products.map(prod -> new ProductDTO(prod));
+    }
+
+    @Transactional
+    public ProductDTO insert(ProductDTO dto) {
+        Product entity = new Product();
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+
+        entity = productRepository.save(entity);
+        return new ProductDTO(entity);
     }
 }
