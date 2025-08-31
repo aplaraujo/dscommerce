@@ -19,6 +19,8 @@ import com.example.dscommerce.dto.ProductDTO;
 import com.example.dscommerce.services.ProductService;
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
+import jakarta.validation.Valid;
+
 @RestController // Configurar a resposta da API
 @RequestMapping(value="/products") // Configurar a rota
 public class ProductController {
@@ -39,14 +41,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
         dto = productService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) throws InvalidDefinitionException {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) throws InvalidDefinitionException {
         dto = productService.update(id, dto);
         return ResponseEntity.ok(dto);
     }
