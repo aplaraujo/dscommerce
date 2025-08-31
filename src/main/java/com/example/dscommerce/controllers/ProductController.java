@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.dscommerce.dto.ProductDTO;
 import com.example.dscommerce.services.ProductService;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
 @RestController // Configurar a resposta da API
 @RequestMapping(value="/products") // Configurar a rota
@@ -45,7 +46,7 @@ public class ProductController {
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) throws InvalidDefinitionException {
         dto = productService.update(id, dto);
         return ResponseEntity.ok(dto);
     }
