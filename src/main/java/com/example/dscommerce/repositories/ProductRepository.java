@@ -1,7 +1,15 @@
 package com.example.dscommerce.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.dscommerce.entities.Product;
+import org.springframework.data.jpa.repository.Query;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {}
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    // Busca paginada
+    @Query("SELECT obj FROM Product obj WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%'))")
+    Page<Product> searchByName(String name, Pageable pageable);
+}
