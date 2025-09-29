@@ -22,7 +22,7 @@ public class Category {
 
     // Relacionamento muitos-para-muitos
     @ManyToMany(mappedBy="categories")
-    private Set<Product> products = new HashSet<>();
+    private final Set<Product> products = new HashSet<>();
 
     public Category() {}
 
