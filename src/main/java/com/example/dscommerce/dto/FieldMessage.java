@@ -2,8 +2,8 @@ package com.example.dscommerce.dto;
 
 public class FieldMessage {
 
-    private String fieldName;
-    private String message;
+    private final String fieldName;
+    private final String message;
     
     public FieldMessage(String fieldName, String message) {
         this.fieldName = fieldName;
