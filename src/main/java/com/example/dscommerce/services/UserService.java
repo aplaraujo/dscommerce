@@ -2,6 +2,7 @@ package com.example.dscommerce.services;
 
 import java.util.List;
 
+import com.example.dscommerce.util.CustomUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CustomUserUtil customUserUtil;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<UserDetailsProjection> result = userRepository.searchUserAndRolesByEmail(username);
@@ -43,11 +47,8 @@ public class UserService implements UserDetailsService {
 
     protected User authenticated() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-            String username = jwtPrincipal.getClaim("username");
-            User user = userRepository.findByEmail(username).get();
-            return user;
+            String username = customUserUtil.getLoggedUsername();
+            return userRepository.findByEmail(username).get();
         } catch (Exception e) {
             throw new UsernameNotFoundException("User not found!");
         }
