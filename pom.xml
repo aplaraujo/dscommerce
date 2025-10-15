@@ -111,6 +111,8 @@
                                 <exclude>com/example/dscommerce/dto/**</exclude>
                                 <exclude>com/example/dscommerce/controllers/handlers/**</exclude>
                                 <exclude>com/example/dscommerce/services/exceptions/**</exclude>
+                                <exclude>com/example/dscommerce/util/**</exclude>
+                                <exclude>com/example/dscommerce/controllers/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>
