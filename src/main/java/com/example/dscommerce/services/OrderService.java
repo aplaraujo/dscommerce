@@ -60,7 +60,7 @@ public class OrderService {
             order.getItems().add(item);
         }
 
-        orderRepository.save(order);
+        order = orderRepository.save(order);
         orderItemRepository.saveAll(order.getItems());
         return new OrderDTO(order);
     }
