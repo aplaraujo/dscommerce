@@ -7,7 +7,6 @@ import com.example.dscommerce.repositories.ProductRepository;
 import com.example.dscommerce.services.ProductService;
 import com.example.dscommerce.tests.util.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,7 +275,7 @@ public class ProductControllerIT {
     }
 
     @Test
-    @Transactional(propagation = Propagation.SUPPORTS) 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deleteShouldReturnBadRequestWhenDependentIdExistsAndAdminIsLogged() throws Exception {
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete("/products/{id}", dependentProductId)
                 .header("Authorization", "Bearer " + adminToken)
