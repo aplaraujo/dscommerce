@@ -1,16 +1,14 @@
 package com.example.dscommerce.controllers;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.example.dscommerce.controllers.mappers.CategoryMapper;
+import com.example.dscommerce.dto.CategoryDTO;
 import com.example.dscommerce.entities.Category;
+import com.example.dscommerce.services.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.dscommerce.dto.CategoryDTO;
-import com.example.dscommerce.services.CategoryService;
+import java.util.List;
 
 @RestController // Configurar a resposta da API
 @RequestMapping(value="/categories") // Configurar a rota
@@ -18,14 +16,13 @@ import com.example.dscommerce.services.CategoryService;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> findById(@PathVariable("id") String id) {
         var categoryId = Long.parseLong(id);
 
         return categoryService.findById(categoryId).map(cat -> {
-            CategoryDTO dto = categoryMapper.toDTO(cat);
+            CategoryDTO dto = CategoryMapper.toDTO(cat);
             return ResponseEntity.ok(dto);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -35,7 +32,7 @@ public class CategoryController {
        @RequestParam(value = "name", required = false) String name
     ) {
         List<Category> list = categoryService.search(name);
-        List<CategoryDTO> dto = list.stream().map(categoryMapper::toDTO).toList();
+        List<CategoryDTO> dto = list.stream().map(CategoryMapper::toDTO).toList();
         return ResponseEntity.ok(dto);
     }
 

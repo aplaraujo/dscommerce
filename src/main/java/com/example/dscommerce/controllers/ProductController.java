@@ -1,6 +1,9 @@
 package com.example.dscommerce.controllers;
 import java.net.URI;
 
+import com.example.dscommerce.controllers.mappers.ProductMapper;
+import com.example.dscommerce.dto.ProductSearchDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +28,18 @@ import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import jakarta.validation.Valid;
 
 @RestController // Configurar a resposta da API
-@RequestMapping(value="/products") // Configurar a rota
+@RequestMapping(value = "/products") // Configurar a rota
+@RequiredArgsConstructor
 public class ProductController {
+
+    private final ProductService productService;
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ProductDTO> findById(@PathVariable String id) {
+        var productId = Long.parseLong(id);
+        ProductDTO dto = productService.findById(productId);
+        return ResponseEntity.ok(dto);
+    }
 
 //    @Autowired
 //    private ProductService productService;
