@@ -1,7 +1,9 @@
 package com.example.dscommerce.services;
 
 import java.util.List;
+import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,15 +13,13 @@ import com.example.dscommerce.entities.Category;
 import com.example.dscommerce.repositories.CategoryRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll() {
-        List<Category> result = categoryRepository.findAll();
-        return result.stream().map(cat -> new CategoryDTO(cat)).toList();
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
     }
 
 }
