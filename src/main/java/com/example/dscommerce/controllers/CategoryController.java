@@ -1,14 +1,13 @@
 package com.example.dscommerce.controllers;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.example.dscommerce.controllers.mappers.CategoryMapper;
+import com.example.dscommerce.entities.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.dscommerce.dto.CategoryDTO;
 import com.example.dscommerce.services.CategoryService;
@@ -29,6 +28,15 @@ public class CategoryController {
             CategoryDTO dto = categoryMapper.toDTO(cat);
             return ResponseEntity.ok(dto);
         }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryDTO>> search(
+       @RequestParam(value = "name", required = false) String name
+    ) {
+        List<Category> list = categoryService.search(name);
+        List<CategoryDTO> dto = list.stream().map(categoryMapper::toDTO).toList();
+        return ResponseEntity.ok(dto);
     }
 
 }
