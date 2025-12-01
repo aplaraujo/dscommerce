@@ -19,4 +19,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @EntityGraph(attributePaths = {"categories"})
     Optional<Product> findWithCategoriesById(Long id);
+
+    @Override
+    @EntityGraph(attributePaths = {"categories"})
+    Page<Product> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"categories"})
+    @Query("SELECT obj FROM Product obj WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%'))")
+    Page<Product> searchByNameWithCategories(String name, Pageable pageable);
 }

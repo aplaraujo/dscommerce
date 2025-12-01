@@ -2,13 +2,22 @@ package com.example.dscommerce.services;
 
 import com.example.dscommerce.controllers.mappers.ProductMapper;
 import com.example.dscommerce.dto.ProductDTO;
+import com.example.dscommerce.dto.ProductMinDTO;
+import com.example.dscommerce.entities.Category;
 import com.example.dscommerce.entities.Product;
 import com.example.dscommerce.repositories.CategoryRepository;
 import com.example.dscommerce.repositories.ProductRepository;
 import com.example.dscommerce.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.dscommerce.repositories.specs.ProductSpecs.categoryEqual;
+import static com.example.dscommerce.repositories.specs.ProductSpecs.nameLike;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +31,18 @@ public class ProductService {
         Product product = productRepository.findWithCategoriesById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + id));
         return ProductMapper.toDTO(product);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> findAll(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(ProductMapper::toDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> searchByName(String name, Pageable pageable) {
+        Page<Product> products = productRepository.searchByNameWithCategories(name, pageable);
+        return products.map(ProductMapper::toDTO);
     }
 
 //    public ProductDTO findById(Long id) {

@@ -3,10 +3,14 @@ import java.net.URI;
 
 import com.example.dscommerce.controllers.mappers.ProductMapper;
 import com.example.dscommerce.dto.ProductSearchDTO;
+import com.example.dscommerce.entities.Category;
+import com.example.dscommerce.entities.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +43,29 @@ public class ProductController {
         var productId = Long.parseLong(id);
         ProductDTO dto = productService.findById(productId);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "name") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        Page<ProductDTO> products = productService.findAll(pageable);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDTO>> searchByName(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "name") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        Page<ProductDTO> products = productService.searchByName(name, pageable);
+        return ResponseEntity.ok(products);
     }
 
 //    @Autowired
