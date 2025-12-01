@@ -57,7 +57,7 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    public Long getId() {
+    public Client getId() {
         return id;
     }
 
